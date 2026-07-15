@@ -1,34 +1,34 @@
 public class Punto {
-    // Atributos obligatorios
+
     private int fila;
     private int columna;
     private int valor;
     private boolean recolectado;
 
-    // Constructor
     public Punto(int fila, int columna, int valor) {
         this.fila = fila;
         this.columna = columna;
         this.valor = valor;
-        this.recolectado = false; // Al crearse, ningún punto ha sido tomado
+        this.recolectado = false;
     }
 
-    // Devuelve el puntaje que otorga este punto
     public int obtenerValor() {
-        return valor;
+        return this.valor;
     }
 
-    // Indica si ya fue consumido por el jugador
     public boolean fueRecolectado() {
-        return recolectado;
+        return this.recolectado;
     }
 
-    // Marca el punto como recogido
-    public void recolectar() {
+    public void consumir() {
         this.recolectado = true;
     }
 
-    // Getters
-    public int getFila() { return fila; }
-    public int getColumna() { return columna; }
+    public int getFila() {
+        return fila;
+    }
+
+    public int getColumna() {
+        return columna;
+    }
 }

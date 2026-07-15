@@ -1,5 +1,5 @@
 public class Jugador {
-    // Atributos obligatorios
+
     private String nombre;
     private int fila;
     private int columna;
@@ -8,51 +8,108 @@ public class Jugador {
     private int velocidad;
     private boolean poderActivo;
 
-    // Constructor
-    public Jugador(String nombre, int filaInicial, int columnaInicial) {
+    // NUEVOS ATRIBUTOS PARA GESTIONAR LOS PODERES
+    private String tipoPoderActivo;
+    private int turnosPoder;
+
+    public Jugador(String nombre, int fila, int columna) {
         this.nombre = nombre;
-        this.fila = filaInicial;
-        this.columna = columnaInicial;
-        this.salud = 3;          // Iniciamos con 3 puntos de vida
-        this.puntaje = 0;         // El puntaje inicia en cero
-        this.velocidad = 1;       // Velocidad base
-        this.poderActivo = false; // Inicia sin poderes
+        this.fila = fila;
+        this.columna = columna;
+        this.salud = 3;
+        this.puntaje = 0;
+        this.velocidad = 1;
+        this.poderActivo = false;
+        this.tipoPoderActivo = "Ninguno";
+        this.turnosPoder = 0;
     }
 
-    // Método para desplazarse por el tablero
+    public int getFila() { return fila; }
+    public int getColumna() { return columna; }
+    public void setFila(int fila) { this.fila = fila; }
+    public void setColumna(int columna) { this.columna = columna; }
+    public int getPuntaje() { return puntaje; }
+    public int getSalud() { return salud; }
+    public int getVelocidad() { return velocidad; }
+
+    public boolean isPoderActivo() { return poderActivo; }
+    public String getTipoPoderActivo() { return tipoPoderActivo; }
+    public int getTurnosPoder() { return turnosPoder; }
+
+    // Método para mover un paso individual (esencial para la velocidad x2)
+    public void moverPaso(int dirFila, int dirColumna) {
+        this.fila += dirFila;
+        this.columna += dirColumna;
+    }
+
+    // Mantiene compatibilidad con el código antiguo por si se requiere
     public void mover(String direccion) {
         switch (direccion.toUpperCase()) {
-            case "W": fila--; break;    // Arriba
-            case "S": fila++; break;    // Abajo
-            case "A": columna--; break; // Izquierda
-            case "D": columna++; break; // Derecha
-            default: System.out.println("Dirección no válida (Usa W, A, S, D).");
+            case "W": this.fila--; break;
+            case "S": this.fila++; break;
+            case "A": this.columna--; break;
+            case "D": this.columna++; break;
         }
     }
 
-    // Reduce la salud del jugador al ser atacado
-    public void recibirDaño(int cantidad) {
-        this.salud -= cantidad;
-        if (this.salud < 0) this.salud = 0;
+    public void recogerPunto(Punto p) {
+        if (p != null && !p.fueRecolectado()) {
+            this.puntaje += p.obtenerValor();
+            p.consumir();
+        }
     }
 
-    // Retorna true si la salud es mayor que cero
+    public void recibirDaño(int cantidad) {
+        this.salud -= cantidad;
+        if (this.salud < 0) {
+            this.salud = 0;
+        }
+        System.out.println("\n💥 ¡Ouch! Un fantasma te ha alcanzado. Perdiste una vida.");
+    }
+
+    // IMPLEMENTACIÓN: El jugador asimila el poder consumido
+    public void usarPoder(Poder p) {
+        if (p != null) {
+            this.tipoPoderActivo = p.getTipo();
+            this.turnosPoder = p.getDuracion();
+            this.poderActivo = true;
+
+            // Si es de velocidad, alteramos la estadística del jugador
+            if (this.tipoPoderActivo.equalsIgnoreCase("Velocidad")) {
+                this.velocidad = 2;
+            } else {
+                this.velocidad = 1;
+            }
+            System.out.println("\n🌟 ¡SÚPER PODER ADQUIRIDO! -> [" + tipoPoderActivo + "] por " + turnosPoder + " turnos.");
+        }
+    }
+
+    // Disminuye la duración del poder en cada turno
+    public void actualizarTurnosPoder() {
+        if (poderActivo) {
+            turnosPoder--;
+            if (turnosPoder <= 0) {
+                System.out.println("\n⚠️ El poder [" + tipoPoderActivo + "] ha terminado. Volviendo al estado normal.");
+                this.poderActivo = false;
+                this.tipoPoderActivo = "Ninguno";
+                this.velocidad = 1;
+            }
+        }
+    }
+
     public boolean estaVivo() {
         return this.salud > 0;
     }
 
-    // Muestra la información en la consola
     public void mostrarEstado() {
-        System.out.println("--- JUGADOR ---");
-        System.out.println("Nombre: " + nombre + " | Salud: " + salud + " | Puntaje: " + puntaje);
-        System.out.println("Posición: [" + fila + "," + columna + "]");
+        System.out.println("--- ESTADO DEL JUGADOR ---");
+        System.out.println("Nombre: " + nombre);
+        System.out.println("Salud: " + salud);
+        System.out.println("Puntaje: " + puntaje);
+        if (poderActivo) {
+            System.out.println("Poder Activo: SÍ (" + tipoPoderActivo + " - " + turnosPoder + " turnos restantes)");
+        } else {
+            System.out.println("Poder Activo: NO");
+        }
     }
-
-    // Getters y Setters necesarios para el Tablero y Enemigos
-    public int getFila() { return fila; }
-    public int getColumna() { return columna; }
-    public String getNombre() { return nombre; }
-    public void setFila(int fila) { this.fila = fila; }
-    public void setColumna(int columna) { this.columna = columna; }
-    public void incrementarPuntaje(int valor) { this.puntaje += valor; }
 }

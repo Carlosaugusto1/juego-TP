@@ -1,37 +1,38 @@
 public class Poder {
 
-    // Atributos obligatorios
     private String tipo;
+    private int duracion;
     private int fila;
     private int columna;
-    private int duracion;
     private boolean consumido;
 
-    // Constructor
-    public Poder(String tipo, int fila, int columna, int duracion) {
-        this.tipo = tipo;
+    public Poder(int fila, int columna, String tipo, int duracion) {
         this.fila = fila;
         this.columna = columna;
+        this.tipo = tipo;
         this.duracion = duracion;
         this.consumido = false;
     }
 
-    // Activa el poder (pendiente de implementación)
     public void activar(Jugador j) {
-        System.out.println("Poder activado: " + tipo);
         this.consumido = true;
-
-        // Aquí se implementará el efecto del poder
+        System.out.println("¡Poder activado! Tipo: " + this.tipo);
     }
 
-    // Devuelve una descripción del poder
     public String descripcion() {
-        return "Poder: " + tipo + " | Duración: " + duracion + " turnos.";
+        return "Poder de tipo [" + tipo + "] con una duración de " + duracion + " turnos.";
     }
 
-    // Getters
+    public boolean fueConsumido() {
+        return this.consumido;
+    }
+
     public String getTipo() {
         return tipo;
+    }
+
+    public int getDuracion() {
+        return duracion;
     }
 
     public int getFila() {
@@ -40,13 +41,5 @@ public class Poder {
 
     public int getColumna() {
         return columna;
-    }
-
-    public int getDuracion() {
-        return duracion;
-    }
-
-    public boolean fueConsumido() {
-        return consumido;
     }
 }

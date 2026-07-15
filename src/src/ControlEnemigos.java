@@ -1,42 +1,30 @@
 public class ControlEnemigos {
 
-    // Atributos obligatorios
     private Enemigo[] enemigos;
     private Jugador jugador;
+    private Tablero tablero;
 
-    // Constructor
-    public ControlEnemigos(Enemigo[] enemigos, Jugador jugador) {
+    public ControlEnemigos(Enemigo[] enemigos, Jugador jugador, Tablero tablero) {
+
         this.enemigos = enemigos;
         this.jugador = jugador;
+        this.tablero = tablero;
     }
 
-    // Mueve todos los enemigos activos
     public void moverEnemigos() {
         for (Enemigo enemigo : enemigos) {
             if (enemigo != null && enemigo.isActivo()) {
-                enemigo.mover();
+                enemigo.mover(tablero, jugador);
             }
         }
     }
 
-    // Verifica las colisiones entre enemigos y jugador
     public void verificarColisiones() {
-        for (Enemigo enemigo : enemigos) {
-            if (enemigo != null && enemigo.isActivo()) {
-                enemigo.verificarColision(jugador);
-            }
-        }
     }
 
-    // Elimina enemigos inactivos (pendiente de implementación)
     public void eliminarEnemigosInactivos() {
-
-        // Funcionalidad pendiente
     }
 
-    // Genera el movimiento general de los enemigos
     public void generarMovimientos() {
-        moverEnemigos();
-        verificarColisiones();
     }
 }

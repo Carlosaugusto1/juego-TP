@@ -1,21 +1,16 @@
 import java.util.Scanner;
 
 public class Juego {
-    // ==========================================
-    // ATRIBUTOS PRIVADOS
-    // ==========================================
+   
     private Jugador jugador;
     private Tablero tablero;
     private Enemigo[] enemigos;
-    private ControlEnemigos controladorEnemigos; // <-- Controlamos a los enemigos desde aquí
+    private ControlEnemigos controladorEnemigos; 
     private boolean juegoTerminado;
     private Scanner teclado = new Scanner(System.in);
 
-    // ==========================================
-    // MÉTODOS DEL FLUJO PRINCIPAL
-    // ==========================================
+ 
 
-    // Inicializa todos los componentes preguntando dinámicamente al usuario
     public void iniciarJuego() {
         System.out.println("=== CONFIGURACIÓN DE LA PARTIDA ===");
 
@@ -33,22 +28,19 @@ public class Juego {
             }
         }
 
-        teclado.nextLine(); // Limpiar el salto de línea residual
+        teclado.nextLine(); 
 
-        // Instanciar el tablero
+       
         tablero = new Tablero(filasIngresadas, columnasIngresadas);
         tablero.generarTablero();
         tablero.agregarMuros();
         tablero.agregarPuntos();
         tablero.agregarPoderes();
 
-        // Instanciar al Jugador
         jugador = new Jugador("Pac-Man", 1, 2);
 
-        // Generar enemigos
         generarEnemigos(3);
 
-        // INICIALIZAR EL CONTROLADOR DE ENEMIGOS
         controladorEnemigos = new ControlEnemigos(enemigos, jugador, tablero);
 
         juegoTerminado = false;
@@ -62,17 +54,13 @@ public class Juego {
         int fMax = matrizMapa.length;
         int cMax = matrizMapa[0].length;
 
-        // Enemigos distribuidos de forma segura
+  
         enemigos[0] = new Enemigo("Perseguidor", fMax / 2, 2);
         enemigos[1] = new Enemigo("Aleatorio", fMax - 2, cMax - 2);
         enemigos[2] = new Enemigo("Fantasma", fMax - 2, 1);
     }
 
-    // Dibuja el tablero refrescando la posición de los personajes (¡SIN DEJAR RASTRO!)
-    // IMPORTANTE: pintamos sobre una COPIA de la matriz, nunca sobre la matriz real del
-    // tablero. Así, si dos personajes coinciden en la misma celda (por ejemplo, un enemigo
-    // y el jugador cuando el Escudo está activo), no se corrompe el mapa real ni quedan
-    // "fantasmas" (G) pegados en celdas por las que ya nadie está pasando.
+
     public void actualizarTablero() {
         char[][] matrizReal = tablero.getMatriz();
         int filasTotal = matrizReal.length;
@@ -83,33 +71,29 @@ public class Juego {
             matrizVisual[i] = matrizReal[i].clone();
         }
 
-        // 1. Pintamos primero a los enemigos activos sobre la copia
+      
         for (Enemigo e : enemigos) {
             if (e != null && e.isActivo()) {
                 matrizVisual[e.getFila()][e.getColumna()] = 'G';
             }
         }
 
-        // 2. Pintamos al jugador AL FINAL, para que se vea "encima" si comparte celda con un enemigo
         matrizVisual[jugador.getFila()][jugador.getColumna()] = 'P';
 
-        // 3. Imprimimos la copia; la matriz real del tablero queda intacta
         System.out.println("\n=================================");
         tablero.mostrarTablero(matrizVisual);
         System.out.println("=================================");
     }
 
-    // Muestra las estadísticas en tiempo real
     public void mostrarEstado() {
         jugador.mostrarEstado();
     }
 
-    // Procesa las acciones de cada turno del juego
     public void ejecutarTurno() {
         System.out.print("\nMuévete (W: Arriba, S: Abajo, A: Izquierda, D: Derecha): ");
         String direccion = teclado.nextLine();
 
-        int pasos = jugador.getVelocidad(); // Será 1 por defecto, o 2 si el poder Velocidad está activo
+        int pasos = jugador.getVelocidad(); 
         int dirFila = 0;
         int dirColumna = 0;
 
@@ -120,7 +104,6 @@ public class Juego {
             case "D": dirColumna = 1; break;
         }
 
-        // Si ingresa una tecla inválida
         if (dirFila == 0 && dirColumna == 0) {
             System.out.println("⚠️ Dirección no válida. Usa W, A, S o D.");
             return;
@@ -128,15 +111,12 @@ public class Juego {
 
         boolean seMovioAlMenosUnPaso = false;
 
-        // BUCLE DE MOVIMIENTO PASO A PASO (Soporta la velocidad x2 de forma segura)
         for (int paso = 1; paso <= pasos; paso++) {
             int proximaFila = jugador.getFila() + dirFila;
             int proximaColumna = jugador.getColumna() + dirColumna;
 
-            // Validamos que el paso que vamos a dar sea legal (no haya muros)
             if (tablero.esMovimientoValido(proximaFila, proximaColumna)) {
 
-                // Movemos físicamente al jugador un casillero
                 jugador.moverPaso(dirFila, dirColumna);
                 seMovioAlMenosUnPaso = true;
 
@@ -144,7 +124,6 @@ public class Juego {
                 int fActual = jugador.getFila();
                 int cActual = jugador.getColumna();
 
-                // 1. ¿Había un punto '.'?
                 if (matriz[fActual][cActual] == '.') {
                     for (Punto p : tablero.getPuntos()) {
                         if (p != null && p.getFila() == fActual && p.getColumna() == cActual) {
@@ -154,7 +133,6 @@ public class Juego {
                         }
                     }
                 }
-                // 2. ¿Había un poder 'O'?
                 else if (matriz[fActual][cActual] == 'O') {
                     for (Poder pod : tablero.getPoderes()) {
                         if (pod != null && pod.getFila() == fActual && pod.getColumna() == cActual) {
@@ -165,31 +143,25 @@ public class Juego {
                     }
                 }
 
-                // 3. Verificar colisión INMEDIATA con enemigos al pisar la casilla (Pac-Man los ataca)
                 for (Enemigo e : enemigos) {
                     if (e != null && e.isActivo() && e.verificarColision(jugador)) {
 
-                        // Si tenemos el poder de comer fantasmas
                         if (jugador.isPoderActivo() && jugador.getTipoPoderActivo().equalsIgnoreCase("Cazador")) {
                             System.out.println("\n🔥 ¡CRUNCH! Te has devorado al enemigo [" + e.getTipo() + "]! 🔥");
-                            e.setActivo(false); // Lo eliminamos del mapa
+                            e.setActivo(false);
 
-                            // Recompensamos al jugador con 200 puntos por la hazaña
                             jugador.recogerPunto(new Punto(e.getFila(), e.getColumna(), 200));
                         } else if (jugador.isPoderActivo() && jugador.getTipoPoderActivo().equalsIgnoreCase("Escudo")) {
-                            // Si tenemos el escudo activo, el golpe no nos hace nada
                             System.out.println("\n🛡️ ¡El escudo absorbió el golpe del enemigo [" + e.getTipo() + "]!");
                         } else {
-                            // Si no tenemos poder, nos atacan de forma normal
                             e.atacar(jugador);
                             jugador.setFila(1);
                             jugador.setColumna(2);
-                            break; // Rompemos el ciclo de colisiones, fuimos reseteados
+                            break; 
                         }
                     }
                 }
 
-                // Si por culpa de una colisión fuimos devueltos a la salida, cancelamos el segundo paso de velocidad
                 if (jugador.getFila() == 1 && jugador.getColumna() == 2) {
                     break;
                 }
@@ -200,18 +172,14 @@ public class Juego {
                 } else {
                     System.out.println("¡PARED! Te detuviste en el segundo paso de velocidad.");
                 }
-                break; // Si choca con una pared en el camino, se frena inmediatamente
+                break;
             }
         }
 
-        // Si el jugador realizó con éxito su acción de movimiento en este turno
         if (seMovioAlMenosUnPaso) {
 
-            // ==========================================
-            // ¡TURNO DE LOS ENEMIGOS!
-            // ==========================================
+
             if (controladorEnemigos != null) {
-                // Si el poder de congelar está activo, los enemigos pierden su turno
                 if (jugador.isPoderActivo() && jugador.getTipoPoderActivo().equalsIgnoreCase("Congelar")) {
                     System.out.println("❄️ ¡Los enemigos están congelados y no pueden moverse en este turno!");
                 } else {
@@ -219,7 +187,6 @@ public class Juego {
                 }
             }
 
-            // Volvemos a comprobar colisiones (Por si un enemigo se movió a nuestra misma casilla en su turno)
             for (Enemigo e : enemigos) {
                 if (e != null && e.isActivo() && e.verificarColision(jugador)) {
                     if (jugador.isPoderActivo() && jugador.getTipoPoderActivo().equalsIgnoreCase("Cazador")) {
@@ -237,12 +204,10 @@ public class Juego {
                 }
             }
 
-            // Descontamos un turno de la duración de nuestro poder activo al finalizar la acción
             jugador.actualizarTurnosPoder();
         }
     }
 
-    // Determina si ganaste o perdiste
     public void verificarFinJuego() {
         if (!jugador.estaVivo()) {
             juegoTerminado = true;

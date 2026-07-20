@@ -78,41 +78,42 @@ public class Tablero {
     }
 
     public void agregarPoderes() {
-        // Poder 1: Velocidad (Dura 5 turnos)
+        // Poder 1: Velocidad ('V')
         if (matriz[1][1] == '.') {
-            matriz[1][1] = 'O';
+            matriz[1][1] = 'V';
             poderes[contadorPoderes] = new Poder(1, 1, "Velocidad", 5);
             contadorPoderes++;
         }
 
-        // Poder 2: Congelar (Dura 5 turnos)
+        // Poder 2: Congelar ('C')
         if (matriz[filas - 2][columnas - 2] == '.') {
-            matriz[filas - 2][columnas - 2] = 'O';
+            matriz[filas - 2][columnas - 2] = 'C';
             poderes[contadorPoderes] = new Poder(filas - 2, columnas - 2, "Congelar", 5);
             contadorPoderes++;
         }
 
-        // Poder 3: Cazador (Dura 6 turnos para dar tiempo de perseguir fantasmas)
+        // Poder 3: Cazador ('X')
         if (matriz[1][columnas - 2] == '.') {
-            matriz[1][columnas - 2] = 'O';
+            matriz[1][columnas - 2] = 'X';
             poderes[contadorPoderes] = new Poder(1, columnas - 2, "Cazador", 6);
             contadorPoderes++;
         }
 
-        // Poder 4: Escudo (Dura 4 turnos) - Esquina inferior izquierda, espejo del Poder 1
+        // Poder 4: Escudo ('E')
         if (matriz[filas - 2][1] == '.') {
-            matriz[filas - 2][1] = 'O';
+            matriz[filas - 2][1] = 'E';
             poderes[contadorPoderes] = new Poder(filas - 2, 1, "Escudo", 4);
             contadorPoderes++;
         }
 
-        // Poder 5: Invisibilidad (Dura 5 turnos) - Columna izquierda, altura del centro del mapa
+        // Poder 5: Invisibilidad ('I')
         if (matriz[filas / 2][1] == '.') {
-            matriz[filas / 2][1] = 'O';
+            matriz[filas / 2][1] = 'I';
             poderes[contadorPoderes] = new Poder(filas / 2, 1, "Invisibilidad", 5);
             contadorPoderes++;
         }
     }
+
     public Poder[] getPoderes() {
         return poderes;
     }

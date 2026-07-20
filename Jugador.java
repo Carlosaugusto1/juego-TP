@@ -42,7 +42,7 @@ public class Jugador {
         this.columna += dirColumna;
     }
 
-    // Mantiene compatibilidad con el código antiguo por si se requiere
+    // Mantiene compatibilidad por si se requiere
     public void mover(String direccion) {
         switch (direccion.toUpperCase()) {
             case "W": this.fila--; break;

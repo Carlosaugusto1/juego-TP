@@ -1,17 +1,14 @@
 import java.util.Scanner;
 
 public class Juego {
-    // ==========================================
-    // ATRIBUTOS PRIVADOS
-    // ==========================================
+
     private Jugador jugador;
     private Tablero tablero;
     private Enemigo[] enemigos;
-    private ControlEnemigos controladorEnemigos; // <-- Controlamos a los enemigos desde aquí
+    private ControlEnemigos controladorEnemigos; // Controlamos a los enemigos desde aquí
     private boolean juegoTerminado;
     private Scanner teclado = new Scanner(System.in);
 
-    // Inicializa todos los componentes preguntando dinámicamente al usuario
     // Inicializa todos los componentes preguntando dinámicamente al usuario
     public void iniciarJuego() {
         System.out.println("=== CONFIGURACIÓN DE LA PARTIDA ===");
@@ -29,7 +26,7 @@ public class Juego {
             columnasIngresadas = teclado.nextInt();
 
             if (filasIngresadas < limiteMinimo || columnasIngresadas < limiteMinimo) {
-                System.out.println("⚠️ El tablero es demasiado pequeño. Por favor, introduce dimensiones de al menos " + limiteMinimo + "x" + limiteMinimo + ".\n");
+                System.out.println("El tablero es demasiado pequeño. Por favor, introduce dimensiones de al menos " + limiteMinimo + "x" + limiteMinimo + ".\n");
             }
         }
 
@@ -67,11 +64,11 @@ public class Juego {
         enemigos[2] = new Enemigo("Fantasma", fMax - 2, 1);
     }
 
-    // Dibuja el tablero refrescando la posición de los personajes (¡SIN DEJAR RASTRO!)
-    // IMPORTANTE: pintamos sobre una COPIA de la matriz, nunca sobre la matriz real del
+    // Dibuja el tablero refrescando la posición de los personajes (sin dejar rastro)
+    // IMPORTANTE: pintamos sobre una copia de la matriz, nunca sobre la matriz real del
     // tablero. Así, si dos personajes coinciden en la misma celda (por ejemplo, un enemigo
     // y el jugador cuando el Escudo está activo), no se corrompe el mapa real ni quedan
-    // "fantasmas" (G) pegados en celdas por las que ya nadie está pasando.
+    // "fantasmas" (F) pegados en celdas por las que ya nadie está pasando.
     // Dibuja el tablero refrescando la posición de los personajes
     public void actualizarTablero() {
         char[][] matrizReal = tablero.getMatriz();
@@ -210,9 +207,6 @@ public class Juego {
         // Si el jugador realizó con éxito su acción de movimiento en este turno
         if (seMovioAlMenosUnPaso) {
 
-            // ==========================================
-            // ¡TURNO DE LOS ENEMIGOS!
-            // ==========================================
             if (controladorEnemigos != null) {
                 // Si el poder de congelar está activo, los enemigos pierden su turno
                 if (jugador.isPoderActivo() && jugador.getTipoPoderActivo().equalsIgnoreCase("Congelar")) {

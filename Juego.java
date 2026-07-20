@@ -12,6 +12,7 @@ public class Juego {
     private Scanner teclado = new Scanner(System.in);
 
     // Inicializa todos los componentes preguntando dinámicamente al usuario
+    // Inicializa todos los componentes preguntando dinámicamente al usuario
     public void iniciarJuego() {
         System.out.println("=== CONFIGURACIÓN DE LA PARTIDA ===");
 

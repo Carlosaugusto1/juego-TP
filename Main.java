@@ -13,4 +13,4 @@ public class Main {
 
         System.out.println("\nGracias por jugar Pac-Man OOP.");
     }
-}20
+}

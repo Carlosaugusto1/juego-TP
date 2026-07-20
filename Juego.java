@@ -52,7 +52,7 @@ public class Juego {
         controladorEnemigos = new ControlEnemigos(enemigos, jugador, tablero);
 
         juegoTerminado = false;
-        System.out.println("\n🎉 ¡Tablero de " + filasIngresadas + "x" + columnasIngresadas + " creado con éxito! Iniciando juego...\n");
+        System.out.println("\n¡Tablero de " + filasIngresadas + "x" + columnasIngresadas + " creado con éxito! Iniciando juego...\n");
     }
     public void generarEnemigos(int cantidad) {
         enemigos = new Enemigo[cantidad];
@@ -122,7 +122,7 @@ public class Juego {
 
         // Si ingresa una tecla inválida
         if (dirFila == 0 && dirColumna == 0) {
-            System.out.println("⚠️ Dirección no válida. Usa W, A, S o D.");
+            System.out.println("Dirección no válida. Usa W, A, S o D.");
             return;
         }
 
@@ -174,14 +174,14 @@ public class Juego {
 
                         // Si tenemos el poder de comer fantasmas
                         if (jugador.isPoderActivo() && jugador.getTipoPoderActivo().equalsIgnoreCase("Cazador")) {
-                            System.out.println("\n🔥 ¡CRUNCH! Te has devorado al enemigo [" + e.getTipo() + "]! 🔥");
+                            System.out.println("\n¡CRUNCH! Te has devorado al enemigo [" + e.getTipo() + "]! ");
                             e.setActivo(false); // Lo eliminamos del mapa
 
                             // Recompensamos al jugador con 200 puntos por la hazaña
                             jugador.recogerPunto(new Punto(e.getFila(), e.getColumna(), 200));
                         } else if (jugador.isPoderActivo() && jugador.getTipoPoderActivo().equalsIgnoreCase("Escudo")) {
                             // Si tenemos el escudo activo, el golpe no nos hace nada
-                            System.out.println("\n🛡️ ¡El escudo absorbió el golpe del enemigo [" + e.getTipo() + "]!");
+                            System.out.println("\n🛡¡El escudo absorbió el golpe del enemigo [" + e.getTipo() + "]!");
                         } else {
                             // Si no tenemos poder, nos atacan de forma normal
                             e.atacar(jugador);
@@ -216,7 +216,7 @@ public class Juego {
             if (controladorEnemigos != null) {
                 // Si el poder de congelar está activo, los enemigos pierden su turno
                 if (jugador.isPoderActivo() && jugador.getTipoPoderActivo().equalsIgnoreCase("Congelar")) {
-                    System.out.println("❄️ ¡Los enemigos están congelados y no pueden moverse en este turno!");
+                    System.out.println("¡Los enemigos están congelados y no pueden moverse en este turno!");
                 } else {
                     controladorEnemigos.moverEnemigos();
                 }
@@ -226,11 +226,11 @@ public class Juego {
             for (Enemigo e : enemigos) {
                 if (e != null && e.isActivo() && e.verificarColision(jugador)) {
                     if (jugador.isPoderActivo() && jugador.getTipoPoderActivo().equalsIgnoreCase("Cazador")) {
-                        System.out.println("\n🔥 ¡CRUNCH! Te has devorado al enemigo [" + e.getTipo() + "]! 🔥");
+                        System.out.println("\n¡CRUNCH! Te has devorado al enemigo [" + e.getTipo() + "]! ");
                         e.setActivo(false);
                         jugador.recogerPunto(new Punto(e.getFila(), e.getColumna(), 200));
                     } else if (jugador.isPoderActivo() && jugador.getTipoPoderActivo().equalsIgnoreCase("Escudo")) {
-                        System.out.println("\n🛡️ ¡El escudo absorbió el golpe del enemigo [" + e.getTipo() + "]!");
+                        System.out.println("\n¡El escudo absorbió el golpe del enemigo [" + e.getTipo() + "]!");
                     } else {
                         e.atacar(jugador);
                         jugador.setFila(1);
@@ -249,7 +249,7 @@ public class Juego {
     public void verificarFinJuego() {
         if (!jugador.estaVivo()) {
             juegoTerminado = true;
-            System.out.println("\n💀 ¡GAME OVER! Los fantasmas te atraparon. 💀");
+            System.out.println("\n¡GAME OVER! Los fantasmas te atraparon.");
             return;
         }
 
@@ -266,7 +266,7 @@ public class Juego {
 
         if (!quedanPuntos) {
             juegoTerminado = true;
-            System.out.println("\n🏆 ¡FELICIDADES! Has recolectado todos los puntos del tablero. 🏆");
+            System.out.println("\n¡FELICIDADES! Has recolectado todos los puntos del tablero.");
         }
     }
     public boolean isJuegoTerminado() {

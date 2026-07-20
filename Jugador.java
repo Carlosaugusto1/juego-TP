@@ -64,7 +64,7 @@ public class Jugador {
         if (this.salud < 0) {
             this.salud = 0;
         }
-        System.out.println("\n💥 ¡Ouch! Un fantasma te ha alcanzado. Perdiste una vida.");
+        System.out.println("\n ¡Ouch! Un fantasma te ha alcanzado. Perdiste una vida.");
     }
 
     // IMPLEMENTACIÓN: El jugador asimila el poder consumido
@@ -80,7 +80,7 @@ public class Jugador {
             } else {
                 this.velocidad = 1;
             }
-            System.out.println("\n🌟 ¡SÚPER PODER ADQUIRIDO! -> [" + tipoPoderActivo + "] por " + turnosPoder + " turnos.");
+            System.out.println("\n ¡SÚPER PODER ADQUIRIDO! -> [" + tipoPoderActivo + "] por " + turnosPoder + " turnos.");
         }
     }
 
@@ -89,7 +89,7 @@ public class Jugador {
         if (poderActivo) {
             turnosPoder--;
             if (turnosPoder <= 0) {
-                System.out.println("\n⚠️ El poder [" + tipoPoderActivo + "] ha terminado. Volviendo al estado normal.");
+                System.out.println("\nEl poder [" + tipoPoderActivo + "] ha terminado. Volviendo al estado normal.");
                 this.poderActivo = false;
                 this.tipoPoderActivo = "Ninguno";
                 this.velocidad = 1;
